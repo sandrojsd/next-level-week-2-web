@@ -3,36 +3,57 @@ import React from 'react'
 import WhatsappIcon from '../../assets/images/icons/whatsapp.svg';
 
 import './styles.css';
+import api from '../../services/api';
 
-function TeacherItem() {
+export interface Teacher {
+  id: number;
+  avatar: string;
+  bio: string;
+  cost: number;
+  name: string;
+  subject: string;
+  whatsapp: string;
+}
+
+export interface TeacherItemProps {
+  teacher: Teacher;
+}
+
+const TeacherItem: React.FC<TeacherItemProps> = ({teacher}) => {
+  function handleCreateConnection() {
+    api.post('connections', {
+      user_id: teacher.id,
+    });
+  }
+
   return (
-    <div>
       <article className="teacher-item">
           <header>
-            <img src="https://lh3.googleusercontent.com/a-/AOh14GjlLv18OemayorExPaQnqm1842JxnpjfFgmukajVA=s88-c-k-c0x00ffffff-no-rj-mo" alt="Alexsandro Trindade" />
+            <img src={teacher.avatar} alt={teacher.name} />
             <div>
-              <strong>Alexsandro Trindade</strong>
-              <span>Química</span>
+              <strong>{teacher.name}</strong>
+              <span>{teacher.subject}</span>
             </div>
           </header>
 
           <p>
-            Mussum Ipsum, cacilds vidis litro abertis. Interagi no mé, cursus quis, vehicula ac nisi. 
-            Quem num gosta di mim que vai caçá sua turmis! Si u mundo tá muito paradis? Toma um mé que o 
-            mundo vai girarzis! Sapien in monti palavris qui num significa nadis i pareci latim.
+            {teacher.bio}
           </p>
 
           <footer>
             <p>Preco/hora
-              <strong>R$ 82,00</strong>
+              <strong>R$ {teacher.cost}</strong>
             </p>
-            <button type="button">
+            <a onClick={handleCreateConnection} 
+            href={`https://wa.me/${teacher.whatsapp}`} 
+            type="button"
+            target="_blank"
+            >
               <img src={WhatsappIcon} alt="Whatsapp" />
               Entrar em contado
-            </button>
+            </a>
           </footer>
         </article>
-    </div>
   )
 }
 
